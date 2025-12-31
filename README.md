@@ -69,10 +69,11 @@ pip install -r requirements.txt
 ### **Optional**: create a .env file in the project root directory
 In the root directory of your project, create a new file named .env file. 
 
-##### Add the following content to the .env file:
 >This file will store your credentials and configuration settings, such as the API credentials and base URL. 
 To get your API credentials please visit: https://bdc.fcc.gov/ register to create an account to get your
 username and hash code (api key) which you can copy and paste in the .env file using the structure provided below:
+
+##### Add the following content to the .env file:
 
 
 ```
