@@ -77,7 +77,7 @@ username and hash code (api key) which you can copy and paste in the .env file u
 
 
 ```
-credentials = {'USERNAME':'your.email@domain.com', 'HASH_VALUE':'your registerd api ke'}
+credentials = {'USERNAME':'your.email@domain.com', 'HASH_VALUE':'your registerd api key'}
 BASE_URL = 'https://broadbandmap.fcc.gov'
 ```
 ---
