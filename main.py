@@ -3,15 +3,13 @@ import sys
 import os
 import json
 import typing
-from pathlib import Path
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QPushButton, QTextBrowser, QTextEdit, QShortcut
 from PyQt5 import uic
-from PyQt5.QtGui import QKeySequence, QPalette, QColor, QTextCursor, QTextCharFormat, QMouseEvent
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QShortcut
+from PyQt5.QtGui import QKeySequence, QMouseEvent
 from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QProcess, QPoint
 
 from dotenv import load_dotenv
-
 from bin.download_mb_coverage import MobileCoverageDealer
 from bin.download_fixed_coverage import FixedCoverageDealer
 from bin.download_challenge_data import Challenger
@@ -38,6 +36,7 @@ class ErrorDialog(QDialog):
         self.exec_()
 
 
+# noinspection PyUnresolvedReferences
 class MobileWorker(QObject):
     progress = pyqtSignal(str)
     finished = pyqtSignal()
@@ -59,10 +58,7 @@ class MobileWorker(QObject):
         try:
 
             mobile_coverage_dealer = MobileCoverageDealer(**self.params)
-            res_dict = mobile_coverage_dealer.download()
-
-
-
+            mobile_coverage_dealer.download()
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
@@ -71,6 +67,7 @@ class MobileWorker(QObject):
             self.finished.emit()
 
 
+# noinspection PyUnresolvedReferences
 class FixedWorker(QObject):
     progress = pyqtSignal(str)
     finished = pyqtSignal()
@@ -92,7 +89,7 @@ class FixedWorker(QObject):
         try:
 
             fixed_coverage_dealer = FixedCoverageDealer(**self.params)
-            res_dict = fixed_coverage_dealer.download()
+            fixed_coverage_dealer.download()
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
@@ -101,6 +98,7 @@ class FixedWorker(QObject):
             self.finished.emit()
 
 
+# noinspection PyUnresolvedReferences
 class ChallengeWorker(QObject):
     progress = pyqtSignal(str)
     finished = pyqtSignal()
@@ -122,7 +120,7 @@ class ChallengeWorker(QObject):
         try:
 
             challenge_dealer = Challenger(**self.params)
-            res_dict = challenge_dealer.download()
+            challenge_dealer.download()
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
@@ -132,19 +130,20 @@ class ChallengeWorker(QObject):
 
 
 def restart_app():
-    # start a new process of the current scipt
+    # start a new process of the current script
     QProcess.startDetached(sys.executable, sys.argv)
     # Quite the current Application
     QApplication.quit()
 
+
 def quit_app():
     QApplication.quit()
+
 
 #################################################################################################################
 #                                                     Guss                                                      #
 #                                                  Main Window                                                  #
 #################################################################################################################
-
 
 
 class GussMainWindow(QMainWindow):
@@ -154,10 +153,9 @@ class GussMainWindow(QMainWindow):
         # Set the window flag to remove the title bar
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
-        #Keyboard Short Cuts
+        # Keyboard Short Cuts
         self.reset_shortcut = QShortcut(QKeySequence("Ctrl+Alt+R"), self)
-        self.reset_shortcut.activated.connect(lambda : restart_app())
-
+        self.reset_shortcut.activated.connect(lambda: restart_app())
 
         self.error_dialog = ErrorDialog()
         self.error_dialog.setWindowModality(2)
@@ -197,9 +195,8 @@ class GussMainWindow(QMainWindow):
 
     def mouseMoveEvent(self, event: typing.Optional[QMouseEvent]) -> None:
         delta = QPoint(event.globalPos() - self.oldPosition)
-        self.move(self.x()+ delta.x(), self.y() + delta.y())
+        self.move(self.x() + delta.x(), self.y() + delta.y())
         self.oldPosition = event.globalPos()
-
 
     def toggle_lock_buttons(self, reset_all=False):
         for btn in [self.m_submitt, self.f_submitt, self.c_submitt]:
@@ -230,8 +227,8 @@ class GussMainWindow(QMainWindow):
 
     def set_credentials(self):
         username = self.env_username.text()
-        hash = self.env_api_key.text()
-        os.environ['credentials'] = json.dumps({'USERNAME': f'{username}', 'HASH_VALUE': f'{hash}'})
+        hash_key = self.env_api_key.text()
+        os.environ['credentials'] = json.dumps({'USERNAME': f'{username}', 'HASH_VALUE': f'{hash_key}'})
         os.environ['BASE_URL'] = 'https://broadbandmap.fcc.gov'
 
     def load_env(self):
@@ -247,7 +244,7 @@ class GussMainWindow(QMainWindow):
         if folder_path:
             GUSS.BASE_DIR, GUSS.DATA_DIR, GUSS.DATA_INPUT, \
             GUSS.DATA_OUTPUT, GUSS.CSV_OUTPUT, GUSS.SHP_OUTPUT, \
-            GUSS.GPK_OUTPUT = GUSS.create_initial_directories(folder_path)
+            GUSS.GPK_OUTPUT = GUSS.create_initial_directories(folder_path)  # todo: this is a bug
             self.base_file_path.setText(str(GUSS.BASE_DIR))
 
     def is_env_set(self):

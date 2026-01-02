@@ -15,6 +15,22 @@ from shapely.geometry import Polygon
 from . import BASE_DIR, DATA_INPUT, DATA_OUTPUT, CSV_OUTPUT, GPK_OUTPUT, SHP_OUTPUT
 
 
+def create_initial_directories(base_folder):
+    BASE_DIR = Path(base_folder).resolve()
+    DATA_DIR = BASE_DIR / "data"
+    DATA_INPUT = DATA_DIR / "input"
+    DATA_OUTPUT = DATA_DIR / "output"
+    CSV_OUTPUT = DATA_OUTPUT / "csv"
+    SHP_OUTPUT = DATA_OUTPUT / 'shp'
+    GPK_OUTPUT = DATA_OUTPUT / 'gpkg'
+
+    for dir_path in [DATA_DIR, DATA_INPUT, DATA_OUTPUT, CSV_OUTPUT, SHP_OUTPUT, GPK_OUTPUT]:
+        if not Path.exists(dir_path):
+            Path.mkdir(dir_path)
+
+    return BASE_DIR, DATA_DIR, DATA_INPUT, DATA_OUTPUT, CSV_OUTPUT, SHP_OUTPUT, GPK_OUTPUT
+
+
 class Guss:
 
     def __init__(self, **credentials):
@@ -375,7 +391,7 @@ class Guss:
                 self.url_endpoint = f"/api/public/map/downloads/downloadFile/{data_type}/{file_id}/{file_type}"
         else:
             self.url_endpoint = f"/api/public/map/downloads/downloadFile/{data_type}/{file_id}"
-        print(self.url_endpoint)
+        # print(self.url_endpoint)
         saved_output = self.get_request(save_file=True, return_df=False, file_name=file_name, gis_data_type=gis_type)
 
         return saved_output
@@ -405,17 +421,3 @@ class Guss:
         flipped = tuple(coord[::-1] for coord in coords)
         return Polygon(flipped)
 
-    def create_initial_directories(self, base_folder):
-        BASE_DIR = Path(base_folder).resolve()
-        DATA_DIR = BASE_DIR / "data"
-        DATA_INPUT = DATA_DIR / "input"
-        DATA_OUTPUT = DATA_DIR / "output"
-        CSV_OUTPUT = DATA_OUTPUT / "csv"
-        SHP_OUTPUT = DATA_OUTPUT / 'shp'
-        GPK_OUTPUT = DATA_OUTPUT / 'gpkg'
-
-        for dir_path in [DATA_DIR, DATA_INPUT, DATA_OUTPUT, CSV_OUTPUT, SHP_OUTPUT, GPK_OUTPUT]:
-            if not Path.exists(dir_path):
-                Path.mkdir(dir_path)
-
-        return BASE_DIR, DATA_DIR, DATA_INPUT, DATA_OUTPUT, CSV_OUTPUT, SHP_OUTPUT, GPK_OUTPUT
