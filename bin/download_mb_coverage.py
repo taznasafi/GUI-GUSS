@@ -2,6 +2,25 @@ from guss.gussErrors import GussExceptions
 
 
 class MobileCoverageDealer:
+    """
+
+    :param run: bool, True if you want to run the function, False to dry run
+
+    :param as_of_date: string, as_of_date (date format ‘YYYY-MM-DD’) - required
+
+    :param provider_id_list: list, list of unique identifier for the service provider
+
+    :param state_fips_list: list, a list of 2-digit FIPS code for the selected state / territory from the current U.S. Census
+                            Bureau data (leading zero included)
+    :param technology_list: list, a list of code for the technology with which the provider reports to provide service {300:3G, 400: LTE, 500: 5G-NR}
+
+    :param technology_type: Type of technology (Mobile Broadband, Mobile Voice)
+    :param subcategory: string, valid options: Hexagon Coverage, Raw Coverage
+    :param fiveG_speed_tier_list:
+    :param data_type: "35/3", "7/1"
+    :param gis_type: valid options "SHP", "GPKG"
+    :return: list of downloaded coverage paths.
+    """
     def __init__(self, **kwargs):
         self.run = kwargs.get('run')
         self.guss_instance = kwargs.get("guss_instance")
@@ -22,32 +41,12 @@ class MobileCoverageDealer:
 
     def download(self) -> list:
 
-        """
-
-        :param run: bool, True if you want to run the function, False to dry run
-
-        :param as_of_date: string, as_of_date (date format ‘YYYY-MM-DD’) - required
-
-        :param provider_id_list: list, list of unique identifier for the service provider
-
-        :param state_fips_list: list, a list of 2-digit FIPS code for the selected state / territory from the current U.S. Census
-                                Bureau data (leading zero included)
-        :param technology_list: list, a list of code for the technology with which the provider reports to provide service {300:3G, 400: LTE, 500: 5G-NR}
-
-        :param technology_type: Type of technology (Mobile Broadband, Mobile Voice)
-        :param subcategory: string, valid options: Hexagon Coverage, Raw Coverage
-        :param fiveG_speed_tier_list:
-        :param data_type: "35/3", "7/1"
-        :param gis_type: valid options "SHP", "GPKG"
-        :return: list of downloaded coverage paths.
-        """
-
         if self.technology_type == 'Mobile Broadband':
             # print("passing")
             pass
         elif self.technology_type == 'Mobile Voice':
             print("Since you selected Mobile Voice, I am changing the technology code list to [999]")
-            technology_list = ["999"]
+            self.technology_list = ["999"]
         else:
             raise GussExceptions(message="Please make sure that the technology code should be:\n"
                                          "\t 1) Mobile Broadband\n\t2) Mobile Voice")

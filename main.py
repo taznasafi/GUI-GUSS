@@ -20,6 +20,7 @@ from gui.dark_mode import set_dark_pallet
 
 
 def tech_split_entry(s: str):
+    s = s.replace(" ", "")
     s_list = [int(x) if x.isdigit() else x.strip(" ") for x in s.split(',')]
     return s_list
 
