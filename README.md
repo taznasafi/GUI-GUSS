@@ -1,10 +1,10 @@
-# Guss The FCC BDC API 
-
+# Guss The FCC BDC Data Downloader
+___
 This Python package provides an easy-to-use graphical interface for interacting with the Federal 
 Communications Commission (FCC) Broadband Data Collection (BDC) API. It allows users to
 programmatically download fixed and mobile broadband service coverage data, including availability, speeds,
 providers, and other relevant information for various states in the United States.
-
+___
 ## Features
 
 - Retrieve broadband availability data
@@ -25,7 +25,7 @@ providers, and other relevant information for various states in the United State
 - python-dotenv==1.2.1
 
 For full list of libraries please see requirements.txt file
-  
+___
 ## Installation
 
 ### 1. Download Guss
@@ -63,18 +63,19 @@ To install the dependencies, run:
 ```
 pip install -r requirements.txt
 ```
-
+___
 ## Usage
 
-### **Optional**: create a .env file in the project root directory
-In the root directory of your project, create a new file named .env file. 
-
->This file will store your credentials and configuration settings, such as the API credentials and base URL. 
+### Get Your Credentials
 To get your API credentials please visit: https://bdc.fcc.gov/ register to create an account to get your
-username and hash code (api key) which you can copy and paste in the .env file using the structure provided below:
+username and hash code (api key) which you can copy and paste in the environment tab.
 
-##### Add the following content to the .env file:
+#####**Optional**
+> create a .env file in the project root directory
+In the root directory of your project, create a new file named .env file. 
+> This .env file will store your credentials and configuration settings, such as the API credentials and base URL.
 
+###### Add the following content to the .env file:
 
 ```
 credentials = {'USERNAME':'your.email@domain.com', 'HASH_VALUE':'your registerd api key'}

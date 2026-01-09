@@ -964,9 +964,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="HeaderName">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>70</x>
        <y>0</y>
-       <width>341</width>
+       <width>551</width>
        <height>61</height>
       </rect>
      </property>
@@ -976,7 +976,7 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="text">
-      <string>Guss: The FCC BDC API</string>
+      <string>Guss: The FCC BDC Data Downloader</string>
      </property>
     </widget>
    </widget>
