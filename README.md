@@ -164,7 +164,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
 #### 9. **Workflows**
 
   - **Mobile**: Download mobile broadband availability.
-    ![Load the Environment](./docs/assets/download_mobile.png)
+    ![Load the Environment](./docs/assets/download_mobile.png) 
   - **Fixed**: Download fixed broadband availability (with optional polygonization of the Hex).
     ![Load the Environment](./docs/assets/download_fixed.png)
   - **Challenge**: Download challenge-related datasets.
