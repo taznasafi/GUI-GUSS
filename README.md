@@ -153,16 +153,21 @@ The app accepts various parameters to customize the query, enabling flexibility 
 
 #### 7. **Load `Environment` Settings Tab**
 - Provide your Username and API Key or load them from an `.env` file.
-- Without loading the evironment users will be prompt to provider username and api key
+![Load the Environment](./docs/assets/set_env.png)
+- Without loading the environment users will be prompt to provider username and api key
 
-#### 8. **Optional: Choose `Output` Folder**
-- Select where processed data and GIS files will be saved.
 
-#### 9. **Run Workflows**
+#### 8. **Optional: Set `Output` Folder**
+- Select where processed data and GIS files should be saved.
 
-  - **Mobile**: Analyze mobile broadband availability.
-  - **Fixed**: Analyze fixed broadband availability (with optional polygonization of the Hex).
-  - **Challenge**: Generate challenge-related datasets.
+#### 9. **Workflows**
+
+  - **Mobile**: Download mobile broadband availability.
+    ![Load the Environment](./docs/assets/download_mobile.png)
+  - **Fixed**: Download fixed broadband availability (with optional polygonization of the Hex).
+    ![Load the Environment](./docs/assets/download_fixed.png)
+  - **Challenge**: Download challenge-related datasets.
+![Load the Environment](./docs/assets/download_challenge.png)
 
 
 ### Detailed Information on the Parameters
@@ -229,7 +234,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
 - **`polygonize`**: `Check Button`
   - **Description**: A boolean flag that indicates whether the function should create geometry based on H3 hex id.
     - `checked`: Create geometry based on H3 hex id.
-    - `unchecked`: Do not create geometry based on H3 hex id.
+    - `unchecked`: Do not create geometry based on H3 hex id. Output will be a CSV file
   - **Example**: `checked button`
   
 ---
