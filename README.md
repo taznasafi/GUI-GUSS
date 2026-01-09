@@ -188,9 +188,9 @@ The app accepts various parameters to customize the query, enabling flexibility 
 - **`State Fips List`**: `comma seperated string`
   - **Description**: A list of 2-digit FIPS codes for the states or territories you want to include in the query. The FIPS code should be included with a leading zero. 
   - **Options**:
-    - If querying specific states/territories, provide the list of FIPS codes (e.g., `"01", "06"` for Alabama and California).
+    - If querying specific states/territories, provide the list of FIPS codes (e.g., `01, 06` for Alabama and California).
     - If querying all FIPS codes, use `"all"` to select all states/territories.
-  - **Example**: `"01", "06"` or `"all"`
+  - **Example**: `01, 06` or `"all"`
 
 
 - **`Technology List`**: `comma seperated string`
