@@ -193,7 +193,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
   - **Example**: `01, 06` or `"all"`
 
 
-- **`Technology List`**: `comma seperated string`
+- **`Technology List`**: `comma seperated numbers`
   - **Description**: A list of technology codes used by the service provider to report service availability. Each code corresponds to a specific technology.
   - **Options**:
     - `300`: 3G
@@ -221,7 +221,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
     Valid options are:
     - `"35/3"`: 35 mbps download / 3 mbps upload.
     - `"7/1"`: 7 mbps download / 1 mbps upload.
-  - **Example**: `"35/3", "7/1"`
+  - **Example**: `35/3, 7/1`
 
 
 - **`GIS Type`**: `Dropdown`
