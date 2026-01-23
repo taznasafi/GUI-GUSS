@@ -57,7 +57,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="env">
      <attribute name="title">
@@ -1048,17 +1048,6 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionQuit_2"/>
    </widget>
    <addaction name="menuFile"/>
-  </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <action name="actionload_env">
    <property name="text">

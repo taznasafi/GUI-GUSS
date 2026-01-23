@@ -154,7 +154,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
 
 #### 7. **Load `Environment` Settings Tab**
 - Provide your Username and API Key or load them from an `.env` file.
-![Load the Environment](./docs/assets/set_env.png)
+![Load the Environment](assets/set_env.png)
 - Without loading the environment users will be prompt to provider username and api key
 
 
@@ -164,11 +164,11 @@ The app accepts various parameters to customize the query, enabling flexibility 
 #### 9. **Workflows**
 
   - **Mobile**: Download mobile broadband availability.
-    ![Load the Environment](./docs/assets/download_mobile.png) 
+    ![Load the Environment](assets/download_mobile.png) 
   - **Fixed**: Download fixed broadband availability (with optional polygonization of the Hex).
-    ![Load the Environment](./docs/assets/download_fixed.png)
+    ![Load the Environment](assets/download_fixed.png)
   - **Challenge**: Download challenge-related datasets.
-![Load the Environment](./docs/assets/download_challenge.png)
+![Load the Environment](assets/download_challenge.png)
 
 
 ### Detailed Information on the Parameters

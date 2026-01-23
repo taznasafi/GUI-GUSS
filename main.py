@@ -6,17 +6,33 @@ import typing
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QShortcut
-from PyQt5.QtGui import QKeySequence, QMouseEvent
+from PyQt5.QtGui import QKeySequence, QMouseEvent, QIcon, QPixmap
 from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QProcess, QPoint
 
 from dotenv import load_dotenv
 from bin.download_mb_coverage import MobileCoverageDealer
 from bin.download_fixed_coverage import FixedCoverageDealer
 from bin.download_challenge_data import Challenger
-from guss import GUSS
+from guss import GUSS, BASE_DIR
 from guss.gussErrors import GussExceptions
-
 from gui.dark_mode import set_dark_pallet
+
+
+def resource_path(relative_path:str)->str:
+    """
+        Get absolute path to resource, works for dev and for PyInstaller.
+        When packaged, PyInstaller copies files to a temporary folder exposed via sys._MEIPASS.
+        """
+    # base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    # return os.path.join(base_path, relative_path)
+
+    if getattr(sys, "frozen", False):
+        # Running as a bundled executable
+        bundle_dir = sys._MEIPASS
+    else:
+        # Running as a normal Python script
+        bundle_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(bundle_dir, relative_path)
 
 
 def tech_split_entry(s: str):
@@ -28,10 +44,21 @@ def tech_split_entry(s: str):
 class ErrorDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("./gui/error_dialog.ui", self)
+        uic.loadUi(resource_path("gui/error_dialog.ui"), self)
 
     def write_error(self, label_string):
         self.error_dialog_lbl.setText(label_string)
+
+    def show_model(self) -> None:
+        self.exec_()
+
+class MessageDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi(resource_path("gui/dialog.ui"), self)
+
+    def write_message(self, label_string="Process Finished"):
+        self.messageLabel.setText(label_string)
 
     def show_model(self) -> None:
         self.exec_()
@@ -46,6 +73,7 @@ class MobileWorker(QObject):
         super().__init__()
         self.params = params
         self._is_running = True
+        self.message_dialog = MessageDialog()
 
     def run(self):
         def print_hook(*args, **kwargs):
@@ -59,16 +87,18 @@ class MobileWorker(QObject):
         try:
 
             mobile_coverage_dealer = MobileCoverageDealer(**self.params)
-            mobile_coverage_dealer.download()
+            output_path_list = mobile_coverage_dealer.download()
+            self.message_dialog.write_message(f"Download Complete, {len(output_path_list)} number of file(s) saved.")
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
+            self.message_dialog.write_message(f"{e}")
         finally:
+            self.message_dialog.show_model()
             sys.stdout = original_stdout
             self.finished.emit()
 
 
-# noinspection PyUnresolvedReferences
 class FixedWorker(QObject):
     progress = pyqtSignal(str)
     finished = pyqtSignal()
@@ -77,6 +107,7 @@ class FixedWorker(QObject):
         super().__init__()
         self.params = params
         self._is_running = True
+        self.message_dialog = MessageDialog()
 
     def run(self):
         def print_hook(*args, **kwargs):
@@ -90,11 +121,14 @@ class FixedWorker(QObject):
         try:
 
             fixed_coverage_dealer = FixedCoverageDealer(**self.params)
-            fixed_coverage_dealer.download()
+            output_path_list = fixed_coverage_dealer.download()
+            self.message_dialog.write_message(f"Download Complete, {len(output_path_list)} number of file(s) saved.")
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
+            self.message_dialog.write_message(f"{e}")
         finally:
+            self.message_dialog.show_model()
             sys.stdout = original_stdout
             self.finished.emit()
 
@@ -108,6 +142,7 @@ class ChallengeWorker(QObject):
         super().__init__()
         self.params = params
         self._is_running = True
+        self.message_dialog = MessageDialog()
 
     def run(self):
         def print_hook(*args, **kwargs):
@@ -121,11 +156,14 @@ class ChallengeWorker(QObject):
         try:
 
             challenge_dealer = Challenger(**self.params)
-            challenge_dealer.download()
+            output_path_list = challenge_dealer.download()
+            self.message_dialog.write_message(f"Download Complete, {len(output_path_list)} number of file(s) saved.")
 
         except GussExceptions as e:
             self.progress.emit(f"{e}")
+            self.message_dialog.write_message(f"{e}")
         finally:
+            self.message_dialog.show_model()
             sys.stdout = original_stdout
             self.finished.emit()
 
@@ -150,16 +188,24 @@ def quit_app():
 class GussMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('./gui/GUSS.ui', self)
+        uic.loadUi(resource_path(r'gui\GUSS.ui'), self)
         # Set the window flag to remove the title bar
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+
+        #set icon
+        self.setWindowIcon(QIcon(resource_path(r'assets\main_icon.ico')))
 
         # Keyboard Short Cuts
         self.reset_shortcut = QShortcut(QKeySequence("Ctrl+Alt+R"), self)
         self.reset_shortcut.activated.connect(lambda: restart_app())
 
+        #error dialog
         self.error_dialog = ErrorDialog()
         self.error_dialog.setWindowModality(2)
+
+        #message dialog
+        self.message_dialog = MessageDialog()
+        self.message_dialog.setWindowModality(2)
 
         # Redirect stdout to QTextBrowser (initial setup)
         sys.stdout = EmittingStream(self.app_stdOut)
@@ -186,7 +232,7 @@ class GussMainWindow(QMainWindow):
 
         # Base Output Path
         self.base_file_path.setText(str(GUSS.DATA_OUTPUT))
-        self.base_folder_select_btn.clicked.connect(lambda: self.load_base_path())
+        self.base_folder_select_btn.clicked.connect(lambda: self.set_new_base_dirs())
 
         # Fixed logic
         self.f_polygonize_radio.toggled.connect(lambda checked: self.enable_other_field(checked))
@@ -240,7 +286,7 @@ class GussMainWindow(QMainWindow):
             self.env_username.setText(credentials['USERNAME'])
             self.env_api_key.setText(credentials['HASH_VALUE'])
 
-    def load_base_path(self):
+    def set_new_base_dirs(self):
         folder_path = QFileDialog.getExistingDirectory(self, 'Select Output folder')
         if folder_path:
             GUSS.BASE_DIR, GUSS.DATA_DIR, GUSS.DATA_INPUT, \
@@ -264,12 +310,10 @@ class GussMainWindow(QMainWindow):
         self.app_stdOut.insertPlainText(text)
 
     def m_submit_clicked(self, env_set):
-
         if env_set:
             self.set_credentials()
             self.create_Guss_instance()
             print("\n----------------------------------------------------------------------------")
-
             as_of = str(self.m_asOfDate_com.currentText())
             pid_list = [x.strip(" ") for x in self.m_providerIDList.text().split(',')]
             state_fips_list = [x.strip(" ") for x in self.m_state_fips_list.text().split(',')]

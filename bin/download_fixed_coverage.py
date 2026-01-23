@@ -134,23 +134,28 @@ class FixedCoverageDealer:
 
                     saved_output = guss.download_file(data_type=self.data_type, file_id=file_id, file_name=file_name, gis_type=None)
 
+
                     if self.polygonize:
-                        df = pd.read_csv(saved_output, compression='zip')
-                        df['geometry'] = df['h3_res8_id'].apply(guss.polygonize)
+                        try:
+                            df = pd.read_csv(saved_output, compression='zip')
+                            df['geometry'] = df['h3_res8_id'].apply(guss.polygonize)
 
-                        gdf = gpd.GeoDataFrame(df, geometry='geometry', crs=4326)
-                        if self.gis_type == 'gpkg':
-                            output_path = os.path.join(GPK_OUTPUT, file_name.replace('.zip', '.gpkg'))
-                            layer_name = file_name.replace('.zip', '.gpkg')
-                            gdf.to_file(output_path, layer=layer_name)
-                            print(f"GeoPackage saved to {output_path}")
+                            gdf = gpd.GeoDataFrame(df, geometry='geometry', crs=4326)
+                            if self.gis_type == 'gpkg':
+                                output_path = os.path.join(GPK_OUTPUT, file_name.replace('.zip', '.gpkg'))
+                                layer_name = file_name.replace('.zip', '.gpkg')
+                                gdf.to_file(output_path, layer=layer_name, driver="GPKG", engine='pyogrio')
+                                print(f"GeoPackage saved to {output_path}")
 
-                        elif self.gis_type == 'shp':
-                            output_path = os.path.join(SHP_OUTPUT, file_name.replace('.zip', '.shp'))
-                            gdf.to_file(output_path)
-                            print(f"shp saved to {output_path}")
-                        else:
-                            raise GussExceptions(message="Oh no, gis_type was not provided, please indicate gis_type = 'shp' "
-                                                         "or 'gpkg'")
+                            elif self.gis_type == 'shp':
+                                output_path = os.path.join(SHP_OUTPUT, file_name.replace('.zip', '.shp'))
+                                gdf.to_file(output_path, driver='ESRI Shapefile', engine='pyogrio')
+                                print(f"shp saved to {output_path}")
+                            else:
+                                raise GussExceptions(message="Oh no, gis_type was not provided, please indicate gis_type = 'shp' "
+                                                             "or 'gpkg'")
+                        except Exception as e:
+                            raise GussExceptions(message=e)
 
-                    output_path_list.append(saved_output)
+                output_path_list.append(saved_output)
+            return output_path_list

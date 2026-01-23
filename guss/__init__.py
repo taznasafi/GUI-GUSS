@@ -1,9 +1,16 @@
 from pathlib import Path
-import ast
 import os
+import sys
+
+if getattr(sys, 'frozen', False):
+    # Running as an executable (frozen app like PyInstaller)
+    BASE_DIR = Path(os.path.dirname(sys.executable)).resolve()
+else:
+    # Running as a .py script
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # if not Path.exists(BASE_DIR / '.env'):
@@ -15,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #     load_dotenv(BASE_DIR / '.env')
 
 DATA_DIR = BASE_DIR / "data"
-DATA_INPUT =  DATA_DIR/"input"
+DATA_INPUT = DATA_DIR/"input"
 DATA_OUTPUT = DATA_DIR / "output"
 CSV_OUTPUT = DATA_OUTPUT/ "csv"
 SHP_OUTPUT = DATA_OUTPUT/'shp'
