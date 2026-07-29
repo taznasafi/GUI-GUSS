@@ -181,16 +181,16 @@ The app accepts various parameters to customize the query, enabling flexibility 
 
 - **`Provider Id List`**: `comma seperated string`
   - **Description**: A list of unique identifiers for the service provider(s) you wish to query.
-  - If querying all providers, use `"all"` to select all/any providers.
-  - **Example**: `130077, 130403` or `"all"`
+  - If querying all providers, use `all` to select all/any providers.
+  - **Example**: `130077, 130403` or `all`
   
 
 - **`State Fips List`**: `comma seperated string`
   - **Description**: A list of 2-digit FIPS codes for the states or territories you want to include in the query. The FIPS code should be included with a leading zero. 
   - **Options**:
     - If querying specific states/territories, provide the list of FIPS codes (e.g., `01, 06` for Alabama and California).
-    - If querying all FIPS codes, use `"all"` to select all states/territories.
-  - **Example**: `01, 06` or `"all"`
+    - If querying all FIPS codes, use `all` to select all states/territories.
+  - **Example**: `01, 06` or `all`
 
 
 - **`Technology List`**: `comma seperated numbers`
@@ -210,7 +210,7 @@ The app accepts various parameters to customize the query, enabling flexibility 
 
 
 - **`GIS Coverage Type`**: `Dropdown`
-  - **Description**: A drop down choice to specify how to represent a coverage data. Valid options are:
+  - **Description**: A dropdown choice to specify how to represent a coverage data. Valid options are:
     - `'Hexagon Coverage'`
     - `'Raw Coverage'`
   - **Example**: `"Hexagon Coverage"`
